@@ -1,0 +1,7 @@
+\section{Conclusion}
+
+In this work, we investigated neural trajectory decoding under a strictly causal setting and compared two decoding strategies: a Hard Direction Decoder and a Time-Dependent PCA Decoder. While the former relies on early direction classification followed by model-based trajectory estimation, the latter adopts a low-dimensional, time-dependent representation combined with lightweight stabilisation.
+
+Our results show that substantial performance improvements are achieved not by increasing model complexity, but by redesigning the decoding pipeline. In particular, the use of time-dependent representations, PCA-based dimensionality reduction, and soft direction combination significantly improves robustness and reduces error propagation, leading to a marked reduction in RMSE.
+
+These findings suggest that effective neural decoding depends critically on how information is represented and integrated over time. Future work may explore extending this framework to more complex movement tasks or incorporating adaptive representations that further capture nonlinear neural dynamics.

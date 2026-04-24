@@ -1,0 +1,85 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The line above is only needed if you use \thanks for funding or similar notes.
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{tikz}
+
+\usepackage{url}
+
+
+\usetikzlibrary{arrows.meta, positioning}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{\large From Hard Direction Decoding to Time-Dependent Low-Dimensional Neural Decoding for Hand Trajectory Estimation
+
+%
+% \thanks{Identify applicable funding agency here. If none, remove this note.}
+}
+
+\author{
+\IEEEauthorblockN{
+Yunxiang Cai, Sheng Jiang, Minghan Li, Haoqi Zhang
+}
+\IEEEauthorblockA{
+Department of Bioengineering, Imperial College London\\
+Email: \{y.cai25, sheng.jiang25, minghan.li25, haoqi.zhang25\}@imperial.ac.uk
+}
+}
+
+\maketitle
+
+\begin{abstract}
+ This report evaluates two causal decoding frameworks on the BMI hand trajectory estimation task. The first employed an explicit dynamics-based framework combining SVM-based direction classification, velocity regression, and Kalman Filter to model movement evolution. The second adopted a low-dimensional decoding approach, using PCA, LDA, and kNN-based direction inference together with similarity-based trajectory regression. To improve online stability, lightweight causal smoothing and trajectory blending were further incorporated. Results showed that the low-dimensional framework achieved more robust and accurate trajectory prediction than the more heavily parameterised dynamics-based approach. This suggests that, for this dataset, decoder performance depended more on matching the structure of the neural data than on increasing model complexity.
+\end{abstract}
+
+
+\begin{IEEEkeywords}
+Brain–Machine Interface, Neural Decoding, Low-Dimensional Representation, Time-Dependent Models, Causal Decoding, Trajectory Estimation
+\end{IEEEkeywords}
+
+% Input each chapter from its own folder.
+\input{introduction/introduction}
+\input{methods/methods}
+\input{results/results}
+\input{discussion/discussion}
+\input{conclusion/conclusion}
+
+
+The implementation of the proposed methods is available at: \url{https://github.com/shengj1ang/DanceMonkey}.
+
+\section*{Acknowledgment}
+We would like to express their sincere gratitude to Dr.\ Clopath Claudia, and all the GTAs for their valuable guidance, feedback, and support throughout this project.
+
+
+\section*{Attributions}
+
+All team members actively and collaboratively contributed to the project.
+
+Yunxiang Cai led the optimisation and final development of the Time-Dependent PCA Decoder.
+
+Sheng Jiang contributed to the initial development of the Time-Dependent PCA Decoder and was responsible for data visualisation and figure generation.
+
+Minghan Li developed the Hard Direction Decoder and explored its variants.
+
+Haoqi Zhang contributed to the development of the Hard Direction Decoder and participated in the initial structuring and drafting of the report.
+
+All members were involved in discussions, experimental design, result analysis, and refinement of the final report.
+
+Artificial intelligence tools were used in a limited and supportive manner during the project. Specifically, they assisted with language polishing, grammar correction, and minor debugging suggestions. All core algorithm design, implementation decisions, and experimental evaluations were carried out by the team.
+
+
+% Use BibTeX for the reference list.
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

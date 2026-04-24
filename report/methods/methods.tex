@@ -1,0 +1,143 @@
+\section{Methods}
+
+This section describes the two decoding frameworks explored in this study, summarised in Fig.~\ref{fig:pipeline}. We first implemented a \textit{Hard Direction Decoder}, motivated by the widespread use of staged direction inference and state-space models in neural trajectory estimation. We then developed a \textit{Time-Dependent PCA Decoder}, which relies on compact low-dimensional representations and lightweight causal stabilisation for improved robustness.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+    font=\scriptsize,
+    >={Latex[length=1.4mm]},
+    every path/.style={line width=0.45pt},
+    box/.style={
+        draw,
+        rounded corners=1.2pt,
+        align=center,
+        minimum height=6.8mm,
+        inner sep=2pt,
+        text width=1.55cm
+    },
+    dashbox/.style={
+        draw,
+        dashed,
+        rounded corners=1.2pt,
+        align=center,
+        minimum height=6.8mm,
+        inner sep=2pt,
+        text width=1.55cm
+    },
+    title/.style={
+        font=\scriptsize\bfseries,
+        align=left
+    }
+]
+
+\begin{scope}[xshift=-0.6cm]
+
+% ==================== Hard Direction Decoder ====================
+\node[title, anchor=west] at (-1.8,0.55)
+{Hard Direction Decoder};
+
+\node[box] (a1) at (0,-0.1)    {Spike\\trains};
+\node[box] (a2) at (2.0,-0.1)  {Early-window\\features};
+\node[box] (a3) at (4.0,-0.1)  {Direction\\inference};
+
+\node[box] (a4) at (0,-1.25)  {Decoded\\trajectory};
+\node[box] (a5) at (2.0,-1.25) {Kalman\\filtering};
+\node[box] (a6) at (4.0,-1.25) {Velocity\\regression};
+
+\draw[->] (a1) -- (a2);
+\draw[->] (a2) -- (a3);
+\draw[->] (a3) -- (a6);
+\draw[->] (a6) -- (a5);
+\draw[->] (a5) -- (a4);
+
+% ==================== Time-Dependent PCA Decoder ====================
+\begin{scope}[yshift=0.8cm]
+
+\node[title, anchor=west] at (-1.8,-2.95)
+{Time-Dependent PCA Decoder};
+
+\node[box] (b1) at (0,-3.65)   {Spike\\trains};
+\node[box] (b2) at (2.0,-3.65) {Binning /\\preprocessing};
+\node[box] (b3) at (4.0,-3.65) {PCA compact\\representation};
+\node[box] (b4) at (6.0,-3.65) {Direction\\inference};
+
+\node[box]     (b5) at (0,-4.80)   {Decoded\\trajectory};
+\node[dashbox] (b6) at (2.0,-4.80) {Causal\\stabilisation};
+\node[box]     (b7) at (4.0,-4.80) {Regression};
+
+\draw[->] (b1) -- (b2);
+\draw[->] (b2) -- (b3);
+\draw[->] (b3) -- (b4);
+\draw[->] (b4.south) |- (b7.east);
+\draw[->] (b7) -- (b6);
+\draw[->] (b6) -- (b5);
+
+\end{scope}
+
+\end{scope}
+\end{tikzpicture}
+\caption{Overview of the Hard Direction Decoder and the Time-Dependent PCA Decoder.}
+\label{fig:pipeline}
+\end{figure}
+
+\subsection{Hard Direction Decoder}
+
+Our initial design followed a hard direction decoding paradigm, in which movement direction is inferred early and subsequent trajectory estimation is conditioned on a single selected direction. Because motor cortical neurons are known to exhibit directional tuning during reaching \cite{b3}, the decoder first inferred movement direction from early neural activity using a supervised classifier, and then applied direction-specific continuous estimation. Among the direction-inference schemes explored during development, support vector machines (SVMs) were retained due to their empirical robustness.
+
+Neural activity was converted into binned spike-count features, and recent spike history was used to predict two-dimensional velocity. To improve numerical stability in this regression stage, ridge regularisation was used:
+\begin{equation}
+\hat{W} = \arg\min_{W} \|XW - Y\|_2^2 + \lambda \|W\|_2^2,
+\label{eq:ridge}
+\end{equation}
+where $X$ denotes neural features, $Y$ the target velocity, and $\lambda$ the regularisation coefficient. The estimated velocity was then incorporated into a state-space model. Kalman filtering was used to relate neural activity to movement kinematics \cite{b4,b5}. In its final form, the decoder employed a six-dimensional constant-acceleration state,
+\begin{equation}
+x_t = [p_x,\; p_y,\; v_x,\; v_y,\; a_x,\; a_y]^T,
+\label{eq:state}
+\end{equation}
+with dynamics
+\begin{equation}
+x_t = A x_{t-1} + w_t, \qquad z_t = H x_t + v_t,
+\label{eq:kf}
+\end{equation}
+where $w_t$ and $v_t$ denote process and observation noise.
+
+To better capture trajectory variability, noise statistics were learned from training data and adjusted for early and late decoding phases. Despite these refinements, the framework remained sensitive to errors introduced in the initial direction selection stage, motivating the development of a more robust decoding strategy.
+
+\subsection{Time-Dependent PCA Decoder}
+
+We next adopted a low-dimensional decoding strategy based on time-dependent neural representations. This design was motivated by the observation that motor cortical activity evolves on low-dimensional manifolds that capture task-relevant structure \cite{b2}. Rather than relying on a single global model, we constructed compact representations that adapt to the available neural evidence at each time point.
+
+Spike trains were first converted into 20\,ms bins, followed by a square-root transform and exponential moving average (EMA) smoothing to reduce noise. Features from several recent time windows were concatenated to capture short-term temporal dynamics. Principal component analysis (PCA) was then applied to obtain a low-dimensional representation,
+\begin{equation}
+\tilde{x} = U_r^{T}(x-\mu),
+\label{eq:pca}
+\end{equation}
+where $U_r$ contains the leading principal components.
+
+
+The dimensionality $r$ was not fixed manually, but determined automatically based on a variance retention criterion. Specifically, principal components were selected such that the cumulative explained variance exceeded a predefined threshold (varKeep). 
+
+Let $\{\lambda_i\}$ denote the eigenvalues sorted in descending order. The number of retained components $r$ is chosen as the smallest integer satisfying
+\begin{equation}
+\frac{\sum_{i=1}^{r} \lambda_i}{\sum_{i=1}^{D} \lambda_i} \geq \text{varKeep},
+\end{equation}
+where $D$ is the original feature dimension. In this work, the threshold was set to $0.95$, allowing the representation to adapt to the intrinsic structure of the data while avoiding unnecessary high-dimensional noise.
+
+
+In this reduced space, linear discriminant analysis (LDA) was used to enhance separation between movement directions, and direction inference was performed using distance-weighted $k$-nearest neighbours. This combination provided a compact, discriminative, and locally adaptive representation of neural activity.
+
+Trajectory-related quantities were then estimated using direction-conditioned regression models in the reduced feature space. Compared with a single global mapping, this formulation enabled smoother and more stable neural-to-kinematic predictions while maintaining causality.
+
+\subsection{Lightweight Causal Stabilisation}
+
+Although the low-dimensional decoder was more robust, early-stage predictions could still exhibit instability due to directional uncertainty. We therefore introduced lightweight causal stabilisation mechanisms.
+
+First, instead of relying on a single hard direction estimate, predictions from multiple candidate directions were softly combined:
+\begin{equation}
+\hat{y}=\sum_{m=1}^{M} w_m \hat{y}_m, \qquad \sum_{m=1}^{M} w_m = 1,
+\label{eq:ensemble}
+\end{equation}
+which reduced sensitivity to early misclassification. Second, predictions were blended with direction-specific mean trajectories, with the influence of the mean decaying over time. Third, displacement clipping was applied to suppress implausible jumps. Finally, lightweight causal smoothing was used to reduce high-frequency jitter.
+
+All operations were strictly causal and relied only on past and current observations. These mechanisms did not replace the core decoder, but improved stability while preserving a compact and interpretable structure.

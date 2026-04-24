@@ -1,0 +1,13 @@
+\section{Discussion}
+
+The results of this study highlight that decoding performance is influenced more by the overall pipeline structure than by the choice of individual components. While the Hard Direction Decoder incorporated increasingly sophisticated elements, including SVM-based classification and Kalman filtering, these refinements resulted in only marginal improvements. This suggests that improving individual modules within a fixed architecture is insufficient when the underlying information flow is suboptimal.
+
+A key limitation of the Hard Direction Decoder lies in its reliance on early hard direction selection. Errors made at this stage propagate through subsequent velocity estimation and state-space filtering, leading to persistent trajectory deviations. In contrast, the proposed Time-Dependent PCA Decoder mitigates this issue by delaying commitment to a single direction and allowing multiple candidate directions to contribute through soft combination. This reduces sensitivity to early uncertainty and improves robustness in the causal decoding setting.
+
+Another important factor is the use of time-dependent models. By constructing separate representations for different time points, the decoder adapts to the amount of available neural information as the movement unfolds. Early predictions rely on compact, noise-robust features, while later predictions benefit from richer temporal context. This contrasts with a static model, which must balance these competing requirements globally.
+
+The use of PCA further supports this design by providing a low-dimensional representation that captures task-relevant neural structure while suppressing noise. Importantly, the dimensionality is selected automatically based on a variance retention criterion, avoiding manual tuning and enabling the representation to adapt to the intrinsic structure of the data. As shown in the results, decoding performance depends critically on this balance: overly aggressive dimensionality reduction leads to information loss, whereas retaining too many components introduces noise.
+
+Finally, the proposed approach achieves these improvements without relying on complex state-space models. Instead, lightweight causal smoothing and feature-based temporal integration provide sufficient stability for accurate trajectory reconstruction. This demonstrates that, for this task, appropriate use of low-dimensional structure and pipeline design can outperform more complex dynamic models while remaining computationally efficient and fully causal.
+
+Overall, these findings suggest that effective neural decoding depends not only on model complexity, but more importantly on how information is structured, represented, and propagated through the decoding pipeline.
