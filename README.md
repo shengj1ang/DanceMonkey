@@ -52,6 +52,16 @@ testFunction_for_students("time-dependent-pca-decoder/v5")
         -   Runtime
     -   Computes final weighted score(0.9*RMSE+0.1*Runtime)
 
+## Experiments and Analysis Scripts
+
+In addition to the decoding pipelines, this repository includes automated scripts for running experiments and generating analysis results.
+
+These scripts are mainly located in:
+
+```text
+src/time-dependent-pca-decoder/v4/
+```
+
 ## Report
 
 See `report/BrainMachineInterface.pdf` for full details.
