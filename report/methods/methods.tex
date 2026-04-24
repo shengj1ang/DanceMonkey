@@ -108,7 +108,7 @@ To better capture trajectory variability, noise statistics were learned from tra
 
 We next adopted a low-dimensional decoding strategy based on time-dependent neural representations. This design was motivated by the observation that motor cortical activity evolves on low-dimensional manifolds that capture task-relevant structure \cite{b2}. Rather than relying on a single global model, we constructed compact representations that adapt to the available neural evidence at each time point.
 
-Spike trains were first converted into 20\,ms bins, followed by a square-root transform and exponential moving average (EMA) smoothing to reduce noise. Features from several recent time windows were concatenated to capture short-term temporal dynamics. Principal component analysis (PCA) was then applied to obtain a low-dimensional representation,
+Spike trains were first converted into 20\,ms bins, followed by a square-root transform and exponential moving average (EMA) smoothing to reduce noise. Features from all available causal time bins up to the current decoding time were concatenated to capture the temporal evolution of neural activity. Principal component analysis (PCA) was then applied to obtain a low-dimensional representation,
 \begin{equation}
 \tilde{x} = U_r^{T}(x-\mu),
 \label{eq:pca}
@@ -122,7 +122,7 @@ Let $\{\lambda_i\}$ denote the eigenvalues sorted in descending order. The numbe
 \begin{equation}
 \frac{\sum_{i=1}^{r} \lambda_i}{\sum_{i=1}^{D} \lambda_i} \geq \text{varKeep},
 \end{equation}
-where $D$ is the original feature dimension. In this work, the threshold was set to $0.95$, allowing the representation to adapt to the intrinsic structure of the data while avoiding unnecessary high-dimensional noise.
+where $D$ is the original feature dimension. In this work, the threshold was set to $0.85$, allowing the representation to adapt to the intrinsic structure of the data while avoiding unnecessary high-dimensional noise.
 
 
 In this reduced space, linear discriminant analysis (LDA) was used to enhance separation between movement directions, and direction inference was performed using distance-weighted $k$-nearest neighbours. This combination provided a compact, discriminative, and locally adaptive representation of neural activity.
@@ -138,6 +138,8 @@ First, instead of relying on a single hard direction estimate, predictions from 
 \hat{y}=\sum_{m=1}^{M} w_m \hat{y}_m, \qquad \sum_{m=1}^{M} w_m = 1,
 \label{eq:ensemble}
 \end{equation}
-which reduced sensitivity to early misclassification. Second, predictions were blended with direction-specific mean trajectories, with the influence of the mean decaying over time. Third, displacement clipping was applied to suppress implausible jumps. Finally, lightweight causal smoothing was used to reduce high-frequency jitter.
+which reduced sensitivity to early misclassification. Second, predictions were blended with direction-specific mean trajectories, with the influence of the mean decaying over time. 
+%这里删掉了
+%Third, displacement clipping was applied to suppress implausible jumps. %Finally, lightweight causal smoothing was used to reduce high-frequency jitter.
 
 All operations were strictly causal and relied only on past and current observations. These mechanisms did not replace the core decoder, but improved stability while preserving a compact and interpretable structure.

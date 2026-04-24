@@ -9,7 +9,7 @@ function modelParameters = positionEstimatorTraining(training_data)
     smoothMode = 'ema';
     emaAlpha = 0.45;        % 保持因果平滑，防止使用未来数据
     minMeanRate = 0.5;      % 过滤低频死神经元
-    pcaVarKeep = 0.85;      % 更强PCA压缩减少过拟合
+    pcaVarKeep = 0.95;      % 更强PCA压缩减少过拟合
     ldaDim = 7;
     ridgeLambda = 10;       % 岭回归防过拟合
 

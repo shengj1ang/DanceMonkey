@@ -60,13 +60,13 @@ Figure~\ref{fig:pca_trajectory} illustrates representative decoded trajectories.
 Overall, these results demonstrate that appropriate use of low-dimensional structure and pipeline design leads to substantial improvements in decoding accuracy, while remaining fully causal and computationally efficient.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=0.8\columnwidth]{results/RMSE-vs-Mean-Selected-PCA-Dimension.png}}
+\centerline{\includegraphics[width=0.8\columnwidth]{results/RMSE-vs-Mean-Selected-PCA-Dimension-v5.png}}
 \caption{RMSE as a function of the mean number of selected PCA dimensions. Each point corresponds to a different variance retention threshold. An intermediate dimensionality achieves the best performance, while too few or too many components lead to increased error.}
 \label{fig:pca_dimension}
 \end{figure}
 
 We further analysed the effect of PCA dimensionality on decoding performance (Fig.~\ref{fig:pca_dimension}). The results show a non-monotonic relationship between the number of retained principal components and RMSE.
 
-Best performance is achieved at an intermediate dimensionality, corresponding to a variance retention of approximately 0.95. When too few components are retained, important task-relevant information is lost. In contrast, retaining too many components introduces noise and degrades performance.
+Best performance is achieved at an intermediate dimensionality, corresponding to a variance retention of approximately 0.85. When too few components are retained, important task-relevant information is lost. In contrast, retaining too many components introduces noise and degrades performance.
 
 This result highlights the importance of balancing information preservation and noise suppression when constructing low-dimensional neural representations.
