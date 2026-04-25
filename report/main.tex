@@ -11,7 +11,15 @@
 \usepackage{tikz}
 
 \usepackage{url}
+% \usepackage[hidelinks]{hyperref}
 
+
+\usepackage[
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+]{hyperref}
 
 \usetikzlibrary{arrows.meta, positioning}
 
@@ -19,11 +27,13 @@
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 \begin{document}
-
-\title{\large From Hard Direction Decoding to Time-Dependent Low-Dimensional Neural Decoding for Hand Trajectory Estimation
+%\normalsize
+\small
+\title{\LARGE\bfseries From Hard Direction Decoding to Time-Dependent Low-Dimensional Neural Decoding for Hand Trajectory Estimation
 
 %
-% \thanks{Identify applicable funding agency here. If none, remove this note.}
+\thanks{The neural data have been generously provided by the laboratory of Prof. Krishna Shenoy at Stanford University. The 
+data are to be used exclusively for educational purposes in this course.}
 }
 
 \author{
@@ -60,22 +70,30 @@ The implementation of the proposed methods is available at: \url{https://github.
 \section*{Acknowledgment}
 We would like to express their sincere gratitude to Dr.\ Clopath Claudia, and all the GTAs for their valuable guidance, feedback, and support throughout this project.
 
-
 \section*{Attributions}
 
-All team members actively and collaboratively contributed to the project.
+All team members contributed actively and collaboratively throughout the project, from method development to result analysis and report preparation.
 
-Yunxiang Cai led the optimisation and final development of the Time-Dependent PCA Decoder.
+Yunxiang Cai contributed the optimisation and final refinement of the Time-Dependent PCA Decoder. This included improving the overall decoding pipeline, tuning key components of the final low-dimensional framework, and consolidating the version used for the final experiments and report. 
 
-Sheng Jiang contributed to the initial development of the Time-Dependent PCA Decoder and was responsible for data visualisation and figure generation.
+Sheng Jiang led to the initial development of the Time-Dependent PCA Decoder and was primarily responsible for data visualisation and figure generation. This included preparing plots and graphical materials used to support the analysis, comparison of decoder behaviour, and presentation of results in the report. 
 
-Minghan Li developed the Hard Direction Decoder and explored its variants.
+Minghan Li developed the Hard Direction Decoder and explored multiple variants of this framework during the earlier stage of the project. This work involved investigating different formulations of direction-based decoding and assessing their performance as part of the team’s iterative model development process. 
 
-Haoqi Zhang contributed to the development of the Hard Direction Decoder and participated in the initial structuring and drafting of the report.
+Haoqi Zhang contributed to the development of the Hard Direction Decoder and participated in the initial structuring and drafting of the report. This included helping organise the narrative of the study, shaping the methodological presentation, and contributing to the written explanation of the project’s progression.
 
-All members were involved in discussions, experimental design, result analysis, and refinement of the final report.
+Besides these main duties, each member participated in group discussions, experimental design, interpretation of outcomes and final report revision. This project was done on a team basis where the final submission represented collective discussion and collective refinement at every stage of the work.
 
-Artificial intelligence tools were used in a limited and supportive manner during the project. Specifically, they assisted with language polishing, grammar correction, and minor debugging suggestions. All core algorithm design, implementation decisions, and experimental evaluations were carried out by the team.
+\section*{AI Use Statement}
+Artificial intelligence tools were used in a supportive capacity during this project.
+
+AI tools were utilized in report writing to help in language polishing, grammar correction, sentence restructuring, refining academic phrasing, and better section organization. The tools were also used to assist when making technical descriptions, captions of figures and interpretation of results simpler and shorter.
+
+In literature research, AI was used as a source that could assist in finding and summarising important pieces of literature related to neural decoding, Kalman filtering, low-dimensional neural representation and estimation of trajectories. It helped the group to know why the first explicit dynamics based framework did not show much improvement and think about other low-dimensional decoding approach. Selection, verification, and interpretation of the literature, as well as the choice to change the modeling direction, were performed by the team.
+
+AI tools were used in order to offer directions on debugging, clarify problems with clearer comments, and enhance the readability or organization of code. They were additionally used in assisting to discuss some of the potential causes of underperforming model variants including feature construction, direction inference stability and interaction of decoding stages.
+
+The detailed decoding algorithms, submitted results and the final scientific conclusion are not generated using AI tools. The main intellectual work, such as formulating the problem, model design and implementation, parameters choosing, experimental assessment, interpreting results, and critically discussing them has been carried out by the team.
 
 
 % Use BibTeX for the reference list.

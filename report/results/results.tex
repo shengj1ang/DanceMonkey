@@ -35,7 +35,7 @@ Final model (tuned PCA + smoothing) & \textbf{7.50} & 3.17 & \textbf{7.07} \\
 \end{tabular}
 \end{table}
 
-In contrast, the proposed Time-Dependent PCA Decoder achieved a substantially lower RMSE of approximately 7.5, representing a significant improvement over the Hard Direction Decoder. This indicates that redesigning the decoding pipeline is more effective than refining individual components within a fixed structure.
+In contrast, the proposed Time-Dependent PCA Decoder achieved a substantially lower RMSE of approximately 7.5, representing a significant improvement over the Hard Direction Decoder. This indicates that redesigning the decoding pipeline is more effective than refining individual components within a fixed structure.\\
 
 The performance gain can be attributed to three main factors. First, PCA-based low-dimensional representations provide a compact and noise-robust description of neural activity. Second, direction inference in this reduced space improves reliability compared to early hard decisions. Third, soft blending of multiple candidate directions and lightweight causal stabilisation reduce sensitivity to early decoding errors and improve temporal consistency.
 
@@ -60,7 +60,7 @@ Figure~\ref{fig:pca_trajectory} illustrates representative decoded trajectories.
 Overall, these results demonstrate that appropriate use of low-dimensional structure and pipeline design leads to substantial improvements in decoding accuracy, while remaining fully causal and computationally efficient.
 
 \begin{figure}[htbp]
-\centerline{\includegraphics[width=0.8\columnwidth]{results/RMSE-vs-Mean-Selected-PCA-Dimension-v5.png}}
+\centerline{\includegraphics[width=0.95\columnwidth]{results/RMSE-vs-Mean-Selected-PCA-Dimension-v5.png}}
 \caption{RMSE as a function of the mean number of selected PCA dimensions. Each point corresponds to a different variance retention threshold. An intermediate dimensionality achieves the best performance, while too few or too many components lead to increased error.}
 \label{fig:pca_dimension}
 \end{figure}
